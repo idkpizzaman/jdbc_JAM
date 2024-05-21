@@ -40,7 +40,7 @@ public class Main {
 				String content = sc.nextLine().trim();
 				
 				Connection connection = null;
-			PreparedStatement pstmt = null;
+				PreparedStatement pstmt = null;
 				
 			try {
 				connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -76,22 +76,18 @@ public class Main {
 				id++;
 				System.out.println(id + "번 게시물이 작성되었습니다.");
 			
-				Article article = new Article(id, title, content);
-				articles.add(article);
-			
-			} else if(cmd.equals("article list")) {			
-				
+			} else if(cmd.equals("article list")){
 				if(articles.size() == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
 				
-				System.out.println("  번호  |  제목  ");
+				System.out.println("	번호	|	제목	");
 				
 				for(int i = articles.size() - 1; i  >= 0; i--) {
 					
 					Article article = articles.get(i);
-					System.out.println(article.id + "번 | " + article.title);
+					System.out.println(article.id + "	번	| " + article.title);
 				}
 			}
 			
