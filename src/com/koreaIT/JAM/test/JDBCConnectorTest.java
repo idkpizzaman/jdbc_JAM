@@ -11,13 +11,10 @@ public class JDBCConnectorTest {
 
     public static void main(String[] args) {
         Connection connection = null;
+        
         try {
-//        	Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("데이터베이스 접속 성공!");
-
-//        } catch (ClassNotFoundException e) {
-//        	System.out.println("드라이버 로딩 실패");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
