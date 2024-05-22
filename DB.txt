@@ -1,3 +1,5 @@
+// dbms 기록용 텍스트 파일
+
 DROP DATABASE IF EXISTS jdbc_article_manager;
 CREATE DATABASE jdbc_article_manager;
 USE jdbc_article_manager;
