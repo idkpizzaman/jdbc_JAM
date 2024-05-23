@@ -3,13 +3,15 @@ package com.koreaIT.JAM;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.koreaIT.JAM.dto.Article;
+import com.koreaIT.JAM.util.DBUtil;
+import com.koreaIT.JAM.util.SecSql;
 
 public class App {
 	
@@ -19,8 +21,6 @@ public class App {
     
 	public void run() {
 		Scanner sc = new Scanner(System.in);
-		
-		int lastArticleId = 1;
 		
 		Connection connection = null;
 		PreparedStatement pstmt = null;
@@ -45,71 +45,47 @@ public class App {
 					String title = sc.nextLine();
 					System.out.printf("내용 : ");
 					String content = sc.nextLine();
-					
-			        try {
 
-			            String sql = "INSERT INTO article";
-			            sql += " SET regDate = NOW()";
-			            sql += ", updateDate = NOW()";
-			            sql += ", title = '" + title + "'";
-			            sql += ", content = '" + content + "';";
-			            
-			            pstmt = connection.prepareStatement(sql);
-			            pstmt.executeUpdate();
+			        SecSql sql = new SecSql();
+			        sql.append("INSERT INTO article");
+			        sql.append(" SET regDate = NOW()");
+			        sql.append(", updateDate = NOW()");
+			        sql.append(", title = ?", title);
+		        	sql.append(", content = ?", content);;
 
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			        }
-					
-					System.out.printf("%d번 게시물이 작성되었습니다\n", lastArticleId);
-					
-					lastArticleId++;
+			        int id = DBUtil.insert(connection, sql);
+			        
+					System.out.printf("%d번 게시물이 작성되었습니다\n", id);
 					
 				} else if (cmd.equals("article list")) {
-					System.out.println("== 게시물 목록 ==");
-
-			    	ResultSet rs = null;
+//			    	ResultSet rs = null;
 			        
 			    	List<Article> articles = new ArrayList<>();
 			    	
-			        try {			         
-			            String sql = "SELECT * FROM article";
-			            sql += " ORDER BY id DESC;";
-			            
-			            pstmt = connection.prepareStatement(sql);
-			            rs = pstmt.executeQuery();
-			            
-			            while (rs.next()) {
-			            	int id = rs.getInt("id");
-			            	String regDate = rs.getString("regDate");
-			            	String updateDate = rs.getString("updateDate");
-			            	String title = rs.getString("title");
-			            	String content = rs.getString("content");
-			            	
-			            	Article article = new Article(id, regDate, updateDate, title, content);
-			            	articles.add(article);
-			            }
-			            
-			        } catch (SQLException e) {
-			            e.printStackTrace();
-			        } finally {
-			        	if (rs != null) {
-			        		try {
-			        			rs.close();
-			        		} catch (SQLException e) {
-			        			e.printStackTrace();
-			        		}
-			        	}			      
-			        }
+			    	SecSql sql = new SecSql();
+			    	sql.append("SELECT * FROM article");
+			    	sql.append(" ORDER BY id DESC;");
+			    	
+			    	List<Map<String, Object>> articleListMap = DBUtil.selectRows(connection, sql);
+			    	// Map 은 키-밸류로 이루어져 있음
+			    	// 일단 받기 위해서 밸류값을 Object로 받고, 나중에 활용할 때 형변환을 할 수 있게끔 함
+			    	// Key = 받아올 리스트의 컬럼명, Object = 안에 들어있는 값
+			    	
+			    	for(Map<String, Object> articleMap : articleListMap) {
+			    		// 맵 형태의 리스트의 articleMap을 articleListMap으로 순환해서 반복문 실행
+			    		articles.add(new Article(articleMap));
+			    	}
+
+					System.out.println("== 게시물 목록 ==");
 					
 					if (articles.size() == 0) {
 						System.out.println("게시물이 존재하지 않습니다");
 						continue;
 					}
 					
-					System.out.println("번호	|	제목");
+					System.out.println("	번호	|		제목			|	작성일	");
 					for (Article article : articles) {
-						System.out.printf("%d	|	%s\n", article.id, article.title);
+						System.out.printf("	%d	|		%s		|	%s\n", article.id, article.title, article.regDate);
 					}
 					
 				} else if (cmd.startsWith("article modify ")) {

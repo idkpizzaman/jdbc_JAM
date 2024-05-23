@@ -1,17 +1,20 @@
 package com.koreaIT.JAM.dto;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+
 public class Article {
 	public int id;
 	public String title;
 	public String content;
-	public String regDate;
-	public String updateDate;
+	public LocalDateTime regDate;
+	public LocalDateTime updateDate;
 
-	public Article(int id, String regDate, String updateDate, String title, String content) {
-		this.id = id;
-		this.regDate = regDate;
-		this.updateDate = updateDate;
-		this.title = title;
-		this.content = content;
+	public Article(Map<String, Object> articleMap) {
+		this.id = (int) articleMap.get("id");
+		this.regDate = (LocalDateTime) articleMap.get("regDate");
+		this.updateDate = (LocalDateTime) articleMap.get("updateDate");
+		this.title = (String) articleMap.get("title");
+		this.content = (String) articleMap.get("content");
 	}
 }
