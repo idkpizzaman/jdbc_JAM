@@ -107,6 +107,7 @@ public class App {
 			        
 			        if(articleCount == 0) {
 			        	System.out.println("수정할 게시물이 없습니다.");
+			        	continue;
 			        }
 			        
 			        System.out.printf("%d번 게시물이 수정되었습니다\n", id);
@@ -119,12 +120,22 @@ public class App {
 					SecSql sql = new SecSql();					
 					sql.append("SELECT *");
 					sql.append(" FROM article");
-					sql.append("WHERE id = " + id);					
+					sql.append("WHERE id = ?" + id);	
 					
-//					System.out.println("번호: " + id);
-//					System.out.println("제목: " + DBUtil.selectRowIntValue(connection, sql));
-//					System.out.println("내용: " + DBUtil.selectRowIntValue(connection, sql));
-//					System.out.println("작성일: " + DBUtil.selectRowIntValue(connection, sql));
+					Map<String, Object> articleMap = DBUtil.selectRow(connection, sql);
+					
+					if (articleMap.isEmpty()) {
+						System.out.println(id + "번 게시물이 없습니다.");
+						continue;
+					}
+					
+					Article article = new Article(articleMap);
+					
+					System.out.println("번호: " + id);
+					System.out.println("제목: " + article.title);
+					System.out.println("내용: " + article.content);
+					System.out.println("작성일: " + article.regDate);
+					System.out.println("수정일: " + article.updateDate);
 			        
 					DBUtil.update(connection, sql);
 
@@ -141,9 +152,11 @@ public class App {
 					}
 		
 					sql.append("DELETE FROM article");
-					sql.append(" WHERE id = " + id);
+					sql.append(" WHERE id = ?" + id);
 					
-					DBUtil.update(connection, sql);
+//					DBUtil.update(connection, sql);
+//					위나 아래나 하는 일은 똑같지만 좀더 쉽게 이해할 수 있도록 메소드 이름을 맞게 변경
+					DBUtil.delete(connection, sql);
 			        
 			        System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
 				}
