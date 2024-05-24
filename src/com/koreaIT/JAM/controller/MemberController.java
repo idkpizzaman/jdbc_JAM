@@ -7,8 +7,12 @@ import com.koreaIT.JAM.util.DBUtil;
 import com.koreaIT.JAM.util.SecSql;
 
 public class MemberController extends Controller{
-	Scanner sc = new Scanner(System.in);
-	Connection connection = null;
+	private Connection connection;
+	
+	public MemberController(Connection connection, Scanner sc) {
+		this.connection = connection;
+		this.sc = sc;
+	}
 
 	public void doAction(String cmd, String methodName) {
 		this.cmd = cmd;
@@ -19,8 +23,10 @@ public class MemberController extends Controller{
 			break;
 		case "login":
 			doLogin();
+			break;
 		case "logout":
 			doLogout();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다.");
 		}
@@ -45,7 +51,7 @@ public class MemberController extends Controller{
 			}
 			
 			SecSql sql = new SecSql();
-			sql.append("SELECT COUNT(id) < 0");
+			sql.append("SELECT COUNT(id) > 0");
 			sql.append("FROM `member`");
 			sql.append("WHERE loginId = ?", loginId);
 			
@@ -91,7 +97,7 @@ public class MemberController extends Controller{
 		}
 		
 		SecSql sql = new SecSql();
-		sql.append("INSERT INTO `member` ");
+		sql.append("INSERT INTO `member`");
 		sql.append("SET regDate = NOW()");
 		sql.append(", updateDate = NOW()");
 		sql.append(", loginId = ?", loginId);
@@ -100,7 +106,7 @@ public class MemberController extends Controller{
 		
 		DBUtil.insert(connection, sql);
 
-		System.out.println(name + "님! 가입을 환영합니다!");
+		System.out.println(loginId + "님! 가입을 환영합니다!");
 		
 	} 
 

@@ -11,8 +11,12 @@ import com.koreaIT.JAM.util.DBUtil;
 import com.koreaIT.JAM.util.SecSql;
 
 public class ArticleController extends Controller{
-	Scanner sc = new Scanner(System.in);
-	Connection connection = null;
+	private Connection connection;
+	
+	public ArticleController(Connection connection, Scanner sc) {
+		this.connection = connection;
+		this.sc = sc;
+	}
 	
 	public void doAction(String cmd, String methodName) {
 		this.cmd = cmd;
@@ -107,6 +111,7 @@ public class ArticleController extends Controller{
         
         if(articleCount == 0) {
         	System.out.println("수정할 게시물이 없습니다.");
+        	return;
         }
         
         System.out.println(foundArticle.getId() + "번 게시물이 수정되었습니다\n");
@@ -127,6 +132,7 @@ public class ArticleController extends Controller{
 		
 		if (articleMap.isEmpty()) {
 			System.out.println(id + "번 게시물이 없습니다.");
+			return;
 		}
 		
 		Article article = new Article(articleMap);
@@ -150,6 +156,7 @@ public class ArticleController extends Controller{
 
 		if (foundarticle.getId() == 0) {
 			System.out.println("삭제할 게시물이 없습니다.");
+			return;
 		}
 
 		sql.append("DELETE FROM article");

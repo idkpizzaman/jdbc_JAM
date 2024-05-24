@@ -10,8 +10,6 @@ public class Article {
 	private LocalDateTime regDate;
 	private LocalDateTime updateDate;
 
-	
-	
 	public int getId() {
 		return id;
 	}

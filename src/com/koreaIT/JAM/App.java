@@ -2,7 +2,6 @@ package com.koreaIT.JAM;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -12,24 +11,23 @@ import com.koreaIT.JAM.controller.MemberController;
 
 public class App {
     
+	final String URL = "jdbc:mysql://localhost:3306/jdbc_article_manager?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
+    final String USER = "root";
+    final String PASSWORD = "";
+	
 	public void run() {
-		
-		final String URL = "jdbc:mysql://localhost:3306/jdbc_article_manager?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
-	    final String USER = "root";
-	    final String PASSWORD = "";
 	    
 		Scanner sc = new Scanner(System.in);
 		
 		Connection connection = null;
-		PreparedStatement pstmt = null;
 		
 		System.out.println("== 프로그램 시작 ==");
 		
 		try {
 			connection = DriverManager.getConnection(URL, USER, PASSWORD);
 			
-			ArticleController articleController = new ArticleController();
-			MemberController memberController = new MemberController();
+			ArticleController articleController = new ArticleController(connection, sc);
+			MemberController memberController = new MemberController(connection, sc);
 			
 			while (true) {
 				System.out.printf("명령어) ");
@@ -38,6 +36,11 @@ public class App {
 				if (cmd.equals("exit")) {
 					System.out.println("프로그램을 종료합니다.");
 					break;
+				}
+				
+				if (cmd.length() == 0) {
+					System.out.println("명령어를 입력해주세요.");
+					continue;
 				}
 				
 				String[] cmdBits = cmd.split(" ");
@@ -86,13 +89,6 @@ public class App {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
 			if (connection != null) {
                 try {
                     connection.close();
@@ -100,10 +96,10 @@ public class App {
                     e.printStackTrace();
                 }
             }
+		}
 		
 		sc.close();
 		
 		System.out.println("== 프로그램 끝 ==");
-		}
 	}
 }
