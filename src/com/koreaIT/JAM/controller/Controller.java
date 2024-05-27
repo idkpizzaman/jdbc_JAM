@@ -12,10 +12,5 @@ public abstract class Controller {
 	public Connection connection;
 
 	public abstract void doAction(String cmd, String methodName);
-
-	public static boolean isLogined() {
-		
-		return false;
-	}
 	
 }

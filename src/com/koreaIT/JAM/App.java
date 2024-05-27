@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.koreaIT.JAM.controller.ArticleController;
 import com.koreaIT.JAM.controller.Controller;
 import com.koreaIT.JAM.controller.MemberController;
+import com.koreaIT.JAM.session.Session;
 
 public class App {
     
@@ -57,17 +58,13 @@ public class App {
 				case "article/write":
 				case "article/modify":
 				case "article/delete":
-				case "member/logout":
-					if (Controller.isLogined() == false) {
-						System.out.println("로그인을 실행해주세요.");
-						continue;
-					} break;
 				case "member/join":
 				case "member/login":
-					if (Controller.isLogined()) {
+					if (Session.isLogined()) {
 						System.out.println("로그아웃을 실행해주세요.");
 						continue;
 					} break;
+				case "member/logout":
 				}
 				
 				Controller controller = null;

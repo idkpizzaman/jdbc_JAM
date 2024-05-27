@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.koreaIT.JAM.dto.Member;
 import com.koreaIT.JAM.service.MemberService;
+import com.koreaIT.JAM.session.Session;
 
 public class MemberController extends Controller{
 	
@@ -33,7 +34,7 @@ public class MemberController extends Controller{
 		}
 	}
 
-	private void doJoin() {
+	public void doJoin() {
 		String loginId = null;
 		String loginPwChk = null;
 		String name = null;
@@ -98,9 +99,10 @@ public class MemberController extends Controller{
 		
 	} 
 
-	private void doLogin() {
+	public void doLogin() {
 		String loginId = null;
 		String loginPw = null;
+		Member member = null;
 		
 		System.out.println("== 로그인 ==");
 		
@@ -120,7 +122,7 @@ public class MemberController extends Controller{
 				continue;
 			}
 			
-			Member member = memberService.getMemberByLoginId(loginId);
+			member = memberService.getMemberByLoginId(loginId);
 			
 			if (member == null) {
 				System.out.printf("[ %s ] 은(는) 존재하지 않는 아이디입니다\n", loginId);
@@ -134,10 +136,16 @@ public class MemberController extends Controller{
 			break;
 		}
 		
+		Session.login(member.id);
 		System.out.printf("[ %s ] 회원님 환영합니다~\n", loginId);
 	}
 
-	private void doLogout() {
+	public void doLogout() {
 		
+		if (Session.isLogined() == false) {
+		}
+		
+		System.out.println("로그인 후 이용해주세요");
+		return;
 	}
 }
