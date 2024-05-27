@@ -58,13 +58,21 @@ public class App {
 				case "article/write":
 				case "article/modify":
 				case "article/delete":
+				case "member/logout":
+					if (Session.isLogined() == false) {
+						System.out.println("로그인을 실행해주세요.");
+						continue;
+					} else {
+						break;
+					}
 				case "member/join":
 				case "member/login":
-					if (Session.isLogined()) {
+					if (Session.isLogined() == true) {
 						System.out.println("로그아웃을 실행해주세요.");
 						continue;
-					} break;
-				case "member/logout":
+					} else {
+						break;
+					}
 				}
 				
 				Controller controller = null;

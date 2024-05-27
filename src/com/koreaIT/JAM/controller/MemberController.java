@@ -13,7 +13,7 @@ public class MemberController extends Controller{
 	
 	public MemberController(Connection connection, Scanner sc) {
 		this.memberService = new MemberService(connection);
-		this.sc = sc;
+		this.sc = new Scanner(System.in);
 	}
 
 	public void doAction(String cmd, String methodName) {
@@ -31,6 +31,7 @@ public class MemberController extends Controller{
 			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다.");
+			break;
 		}
 	}
 
@@ -40,12 +41,12 @@ public class MemberController extends Controller{
 		String name = null;
 		String loginPw = null;										
 		
-		System.out.println("== 회원가입 ==\n");
+		System.out.println("== 회원가입 ==");
 
 		while (true) {
 			
 			System.out.println("아이디를 입력하세요: ");
-			loginId = sc.nextLine();
+			loginId = sc.nextLine().trim();
 			
 			if (loginId.length() == 0) {
 				System.out.println("아이디는 필수입력 정보입니다.");
@@ -141,11 +142,7 @@ public class MemberController extends Controller{
 	}
 
 	public void doLogout() {
-		
-		if (Session.isLogined() == false) {
-		}
-		
-		System.out.println("로그인 후 이용해주세요");
-		return;
+		System.out.println("정상적으로 로그아웃 되었습니다.");
+		Session.logout();
 	}
 }

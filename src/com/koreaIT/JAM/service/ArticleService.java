@@ -15,19 +15,8 @@ public class ArticleService {
 		this.articleDao = new ArticleDao(connection);
 	}
 	
-	public int doWrite(String title, String content) {
-		return articleDao.doWrite(title, content);
-	}
-
-	public static int getCmdnum(String cmd) {
-		int id = 0;
-		
-		try {
-			id = Integer.parseInt(cmd.split(" ")[2]);
-		} catch(Exception e) {
-			return -1;
-		}
-		return id;
+	public int doWrite(int loginedMemberId, String title, String content) {
+		return articleDao.doWrite(loginedMemberId, title, content);
 	}
 
 	public List<Article> showList() {
@@ -73,6 +62,16 @@ public class ArticleService {
 		}
 		
 		return id;
+	}
+
+	public Article getArticleById(int id) {
+		Map<String, Object> articleMap = articleDao.getArticleById(id);
+		
+		if (articleMap.isEmpty()) {
+			return null;
+		}
+		
+		return new Article(articleMap);
 	}
 
 }

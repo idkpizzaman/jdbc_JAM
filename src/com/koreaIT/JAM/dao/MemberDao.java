@@ -15,6 +15,7 @@ public class MemberDao {
 	}
 
 	public void doJoin(String loginId, String loginPw, String name) {
+		
 		SecSql sql = new SecSql();
 		sql.append("INSERT INTO `member`");
 		sql.append("SET regDate = NOW()");
@@ -27,6 +28,7 @@ public class MemberDao {
 	}
 
 	public boolean isLoginIdDup(String loginId) {
+		
 		SecSql sql = new SecSql();
 		sql.append("SELECT COUNT(id) > 0");
 		sql.append("FROM `member`");
@@ -36,6 +38,7 @@ public class MemberDao {
 	}
 	
 	public Map<String, Object> getMemberByLoginId(String loginId) {
+		
 		SecSql sql = new SecSql();
 		sql.append("SELECT *");
 		sql.append("FROM `member`");
