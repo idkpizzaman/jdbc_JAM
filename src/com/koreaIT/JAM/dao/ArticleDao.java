@@ -28,13 +28,16 @@ public class ArticleDao {
 		return DBUtil.insert(connection, sql);
 	}
 
-	public List<Map<String, Object>> showList() {
+	public List<Map<String, Object>> showList(String searchKeyword) {
 		
     	SecSql sql = new SecSql();
     	sql.append("SELECT a.*, m.loginId AS `writerName`");
     	sql.append("FROM article AS a");
     	sql.append("INNER JOIN `member` AS m");
     	sql.append("ON a.memberId = m.id");
+    	if (searchKeyword.length() > 0) {
+    		sql.append("WHERE a.title LIKE CONCAT('%', ?, '%')", searchKeyword);
+    	}
     	sql.append("ORDER BY a.id DESC");
     	
 		return DBUtil.selectRows(connection, sql);
