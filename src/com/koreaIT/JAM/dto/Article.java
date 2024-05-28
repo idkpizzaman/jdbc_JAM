@@ -5,20 +5,23 @@ import java.util.Map;
 
 public class Article {
 	public int id;
-	public String title;
-	public String content;
 	public LocalDateTime regDate;
 	public LocalDateTime updateDate;
 	public int memberId;
 	public String writerName;
+	public String title;
+	public String content;
+	public int vCnt;
 	
 	public Article(Map<String, Object> articleMap) {
 		this.id = (int) articleMap.get("id");
 		this.regDate = (LocalDateTime) articleMap.get("regDate");
 		this.updateDate = (LocalDateTime) articleMap.get("updateDate");
+		this.memberId = (int) articleMap.get("memberId");
+		this.writerName = (String) articleMap.get("writerName");
 		this.title = (String) articleMap.get("title");
 		this.content = (String) articleMap.get("content");
-		this.memberId = (int) articleMap.get("memberId");
-		this.writerName = (String) articleMap.get("writerNmae");
+		this.vCnt = (int) articleMap.get("vCnt");
 	}
+
 }

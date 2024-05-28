@@ -9,12 +9,13 @@ import com.koreaIT.JAM.dao.ArticleDao;
 import com.koreaIT.JAM.dto.Article;
 
 public class ArticleService {
+
 	private ArticleDao articleDao;
 	
-	public ArticleService (Connection connection) {
+	public ArticleService(Connection connection) {
 		this.articleDao = new ArticleDao(connection);
 	}
-	
+
 	public int doWrite(int loginedMemberId, String title, String content) {
 		return articleDao.doWrite(loginedMemberId, title, content);
 	}
@@ -29,7 +30,7 @@ public class ArticleService {
     	}
 		return articles;
 	}
-
+	
 	public Article showDetail(int id) {
 		Map<String, Object> articleMap = articleDao.showDetail(id);
 		
@@ -51,7 +52,7 @@ public class ArticleService {
 	public void doDelete(int id) {
 		articleDao.doDelete(id);
 	}
-	
+
 	public int getCmdNum(String cmd) {
 		int id = 0;
 		
@@ -65,6 +66,7 @@ public class ArticleService {
 	}
 
 	public Article getArticleById(int id) {
+		
 		Map<String, Object> articleMap = articleDao.getArticleById(id);
 		
 		if (articleMap.isEmpty()) {
@@ -74,4 +76,7 @@ public class ArticleService {
 		return new Article(articleMap);
 	}
 
+	public int increaseVCnt(int id) {
+		return articleDao.increaseVCnt(id);
+	}
 }
